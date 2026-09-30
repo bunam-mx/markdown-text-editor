@@ -24,6 +24,7 @@ export type ToolName =
     | 'link'
     | 'buttonlink'
     | 'accordion'
+    | 'modal'
     | 'image'
     | 'undo'
     | 'redo'

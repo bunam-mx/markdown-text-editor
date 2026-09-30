@@ -62,7 +62,7 @@ const varItems = editor => [...(varMenu(editor)?.querySelectorAll(ITEM) ?? [])];
 const labels = editor => varItems(editor).map(b => b.textContent);
 
 const BASE_BAR = ['heading', 'bold', 'italic', 'ul', 'ol', 'checklist', 'blockquote',
-                  'code', 'codeblock', 'hr', 'table', 'link', 'buttonlink', 'accordion', 'image',
+                  'code', 'codeblock', 'hr', 'table', 'link', 'buttonlink', 'accordion', 'modal', 'image',
                   'undo', 'redo', 'indent', 'outdent'];
 const FULL_BAR = [...BASE_BAR, 'preview'];
 // variables are configured inline in the toolbar
@@ -321,6 +321,51 @@ check('the inserted accordion survives the preview sanitizer', () => {
     m.querySelector('.apply-accordion').click();
     const html = e.previewContent.innerHTML;
     return html.includes('accordion') && html.includes('<strong>Answer</strong>');
+});
+
+// --- modal -----------------------------------------------------------------
+
+const openModalDialog = editor => {
+    editor.editorContainer.querySelector('.modal-btn').click();
+    return editor.editorContainer.querySelector('.bootstrap-modal');
+};
+
+check('modal tool renders a button', () => {
+    const e = makeEditor({ toolbar: FULL_BAR });
+    return e.editorContainer.querySelector('.modal-btn') !== null;
+});
+
+check('modal dialog opens with the body toolbar', () => {
+    const e = makeEditor({ toolbar: FULL_BAR });
+    const m = openModalDialog(e);
+    return m !== null
+        && m.querySelector('.modal-title-input') !== null
+        && m.querySelector('.modal-body-input') !== null
+        && m.querySelector('.modal-body-toolbar').querySelectorAll('.markdown-btn').length === 9
+        && m.querySelector('.apply-modal') !== null;
+});
+
+check('apply inserts the bootstrap modal html', () => {
+    const e = makeEditor({ toolbar: FULL_BAR }, '');
+    const m = openModalDialog(e);
+    m.querySelector('.modal-title-input').value = 'My Modal';
+    m.querySelector('.modal-body-input').value = '**bold** content';
+    m.querySelector('.apply-modal').click();
+    const v = e.usertextarea.value;
+    return v.includes('<div class="modal fade"')
+        && v.includes('modal-dialog')
+        && v.includes('My Modal')
+        && v.includes('<strong>bold</strong>');
+});
+
+check('the inserted modal survives the preview sanitizer', () => {
+    const e = makeEditor({ toolbar: FULL_BAR }, '');
+    const m = openModalDialog(e);
+    m.querySelector('.modal-title-input').value = 'FAQ';
+    m.querySelector('.modal-body-input').value = '**Answer**';
+    m.querySelector('.apply-modal').click();
+    const html = e.previewContent.innerHTML;
+    return html.includes('modal') && html.includes('<strong>Answer</strong>');
 });
 
 // --- paste ------------------------------------------------------------------

@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **`buttonlink` tool**: Inserts an HTML link styled as a Bootstrap button (`<a href="..." class="btn btn-primary">`) with a picker for the button variant, next to the regular link tool
 - **`accordion` tool**: Inserts a Bootstrap Accordion component. The modal collects any number of items (header + rich-text body composed with a mini toolbar), and `Continue` stores each item while `Apply` renders the full accordion HTML
+- **`modal` tool**: Inserts a Bootstrap Modal component with a title field and a rich-text body composed with the same mini toolbar as the accordion tool
 
 ## [1.8.0] - 2026-09-29
 

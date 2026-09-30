@@ -9,6 +9,7 @@ import BlockQuoteTool from './tools/BlockQuoteTool.js';
 import LinkTool from './tools/LinkTool.js'
 import ButtonLinkTool from './tools/ButtonLinkTool.js'
 import AccordionTool from './tools/AccordionTool.js'
+import ModalTool from './tools/ModalTool.js'
 import HeadingTool from './tools/HeadingTool.js';
 import ImageTool from './tools/ImageTool.js';
 import UndoTool from './tools/UndoTool.js';
@@ -49,6 +50,7 @@ class Toolbar {
             link: LinkTool,
             buttonlink: ButtonLinkTool,
             accordion: AccordionTool,
+            modal: ModalTool,
             image: ImageTool,
             undo: UndoTool,
             redo: RedoTool,

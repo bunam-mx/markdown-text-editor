@@ -8,6 +8,7 @@ import CheckListTool from './tools/CheckListTool.js';
 import BlockQuoteTool from './tools/BlockQuoteTool.js';
 import LinkTool from './tools/LinkTool.js'
 import ButtonLinkTool from './tools/ButtonLinkTool.js'
+import AccordionTool from './tools/AccordionTool.js'
 import HeadingTool from './tools/HeadingTool.js';
 import ImageTool from './tools/ImageTool.js';
 import UndoTool from './tools/UndoTool.js';
@@ -47,6 +48,7 @@ class Toolbar {
             table: TableTool,
             link: LinkTool,
             buttonlink: ButtonLinkTool,
+            accordion: AccordionTool,
             image: ImageTool,
             undo: UndoTool,
             redo: RedoTool,

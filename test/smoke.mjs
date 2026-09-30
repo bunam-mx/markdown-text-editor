@@ -62,7 +62,7 @@ const varItems = editor => [...(varMenu(editor)?.querySelectorAll(ITEM) ?? [])];
 const labels = editor => varItems(editor).map(b => b.textContent);
 
 const BASE_BAR = ['heading', 'bold', 'italic', 'ul', 'ol', 'checklist', 'blockquote',
-                  'code', 'codeblock', 'hr', 'table', 'link', 'buttonlink', 'image',
+                  'code', 'codeblock', 'hr', 'table', 'link', 'buttonlink', 'accordion', 'image',
                   'undo', 'redo', 'indent', 'outdent'];
 const FULL_BAR = [...BASE_BAR, 'preview'];
 // variables are configured inline in the toolbar
@@ -218,7 +218,7 @@ check('submitting the modal inserts a bootstrap button anchor', () => {
     m.querySelector('.button-link-input').value = 'https://example.com';
     m.querySelector('.button-link-text-input').value = 'Click here';
     m.querySelector('.submit-button-link').click();
-    return e.usertextarea.value === '<a href="https://example.com" class="btn btn-primary">Click here</a>';
+    return e.usertextarea.value === '<a href="https://example.com" class="btn btn-primary" target="_blank">Click here</a>';
 });
 
 check('the variant selector changes the inserted classes', () => {
@@ -229,7 +229,7 @@ check('the variant selector changes the inserted classes', () => {
     const select = m.querySelector('.button-link-variant');
     select.value = 'btn-danger';
     m.querySelector('.submit-button-link').click();
-    return e.usertextarea.value === '<a href="https://example.com" class="btn btn-danger">Go</a>';
+    return e.usertextarea.value === '<a href="https://example.com" class="btn btn-danger" target="_blank">Go</a>';
 });
 
 check('selecting an existing button link prefills the modal', () => {
@@ -250,6 +250,77 @@ check('the inserted anchor survives the preview sanitizer', () => {
     m.querySelector('.submit-button-link').click();
     const html = e.previewContent.innerHTML;
     return html.includes('<a') && html.includes('btn btn-primary') && html.includes('https://example.com');
+});
+
+// --- accordion -------------------------------------------------------------
+
+const openAccordionModal = editor => {
+    editor.editorContainer.querySelector('.accordion-btn').click();
+    return editor.editorContainer.querySelector('.accordion-modal');
+};
+
+check('accordion tool renders a button', () => {
+    const e = makeEditor({ toolbar: FULL_BAR });
+    return e.editorContainer.querySelector('.accordion-btn') !== null;
+});
+
+check('accordion modal opens with the body toolbar', () => {
+    const e = makeEditor({ toolbar: FULL_BAR });
+    const m = openAccordionModal(e);
+    return m !== null
+        && m.querySelector('.accordion-header-input') !== null
+        && m.querySelector('.accordion-body-input') !== null
+        && m.querySelector('.accordion-body-toolbar').querySelectorAll('.markdown-btn').length === 9
+        && m.querySelector('.continue-accordion') !== null
+        && m.querySelector('.apply-accordion') !== null;
+});
+
+check('continue clears the form for the next item', () => {
+    const e = makeEditor({ toolbar: FULL_BAR }, '');
+    const m = openAccordionModal(e);
+    m.querySelector('.accordion-header-input').value = 'First';
+    m.querySelector('.accordion-body-input').value = '**first**';
+    m.querySelector('.continue-accordion').click();
+    return m.querySelector('.accordion-header-input').value === ''
+        && m.querySelector('.accordion-body-input').value === '';
+});
+
+check('apply inserts the bootstrap accordion html', () => {
+    const e = makeEditor({ toolbar: FULL_BAR }, '');
+    const m = openAccordionModal(e);
+    m.querySelector('.accordion-header-input').value = 'Section 1';
+    m.querySelector('.accordion-body-input').value = '**bold** text';
+    m.querySelector('.apply-accordion').click();
+    const v = e.usertextarea.value;
+    return v.includes('<div class="accordion"')
+        && v.includes('accordion-item')
+        && v.includes('Section 1')
+        && v.includes('<strong>bold</strong>');
+});
+
+check('multiple items are collected until apply', () => {
+    const e = makeEditor({ toolbar: FULL_BAR }, '');
+    const m = openAccordionModal(e);
+    m.querySelector('.accordion-header-input').value = 'One';
+    m.querySelector('.accordion-body-input').value = '**first**';
+    m.querySelector('.continue-accordion').click();
+    m.querySelector('.accordion-header-input').value = 'Two';
+    m.querySelector('.accordion-body-input').value = '**second**';
+    m.querySelector('.apply-accordion').click();
+    const v = e.usertextarea.value;
+    return v.includes('One') && v.includes('Two')
+        && v.includes('<strong>first</strong>') && v.includes('<strong>second</strong>')
+        && (v.match(/accordion-item/g) || []).length === 2;
+});
+
+check('the inserted accordion survives the preview sanitizer', () => {
+    const e = makeEditor({ toolbar: FULL_BAR }, '');
+    const m = openAccordionModal(e);
+    m.querySelector('.accordion-header-input').value = 'FAQ';
+    m.querySelector('.accordion-body-input').value = '**Answer**';
+    m.querySelector('.apply-accordion').click();
+    const html = e.previewContent.innerHTML;
+    return html.includes('accordion') && html.includes('<strong>Answer</strong>');
 });
 
 // --- paste ------------------------------------------------------------------

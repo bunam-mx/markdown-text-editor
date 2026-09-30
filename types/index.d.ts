@@ -23,6 +23,7 @@ export type ToolName =
     | 'table'
     | 'link'
     | 'buttonlink'
+    | 'accordion'
     | 'image'
     | 'undo'
     | 'redo'

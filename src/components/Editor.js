@@ -364,6 +364,7 @@ class MarkdownEditor {
                 // Rich Media/Links
                 'link',
                 'buttonlink',
+                'accordion',
                 'image',
                 
                 // View/Preview (Usually far right)

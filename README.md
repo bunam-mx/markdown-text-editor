@@ -91,6 +91,8 @@ That's it. Form submission, `.value` access, and all native textarea behaviour w
 - 🔗 **Button Links** — The `buttonlink` toolbar tool inserts an HTML link styled as a Bootstrap button (`btn btn-primary`, `btn-success`, …) with a variant picker, for pages that already use Bootstrap
 - 🪗 **Accordion** — The `accordion` toolbar tool inserts a Bootstrap Accordion with any number of items; each body is composed with a rich-text mini toolbar before `Apply` renders the component
 - 🪟 **Modal** — The `modal` toolbar tool inserts a Bootstrap Modal with a title and a rich-text body composed with the same mini toolbar
+- 💬 **Tooltip** — The `tooltip` toolbar tool inserts a Bootstrap Tooltip trigger with a placement selector and a rich-text label (bold/italic/strikethrough)
+- 💭 **Popover** — The `popover` toolbar tool inserts a Bootstrap Popover trigger with a placement selector and a rich-text `data-bs-content` (bold/italic/strikethrough)
 - 🏷️ **Variable Dropdown** — Give template authors a menu of readable names that insert placeholders like `{{customer.name}}`. Entries can be grouped, and a sample value can stand in for the placeholder in the preview
 - 🖼️ **Advanced Image Upload** — Upload images directly to your server or S3. Avoids heavy Base64 strings for better performance and SEO
 - 🔍 **Find & Replace** — Built-in panel (`Ctrl+F` / `Ctrl+H`) with live match counter, next/prev navigation, case-sensitive toggle, and replace all

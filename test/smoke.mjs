@@ -62,7 +62,7 @@ const varItems = editor => [...(varMenu(editor)?.querySelectorAll(ITEM) ?? [])];
 const labels = editor => varItems(editor).map(b => b.textContent);
 
 const BASE_BAR = ['heading', 'bold', 'italic', 'ul', 'ol', 'checklist', 'blockquote',
-                  'code', 'codeblock', 'hr', 'table', 'link', 'buttonlink', 'accordion', 'modal', 'image',
+                  'code', 'codeblock', 'hr', 'table', 'link', 'buttonlink', 'accordion', 'modal', 'tooltip', 'popover', 'image',
                   'undo', 'redo', 'indent', 'outdent'];
 const FULL_BAR = [...BASE_BAR, 'preview'];
 // variables are configured inline in the toolbar
@@ -366,6 +366,124 @@ check('the inserted modal survives the preview sanitizer', () => {
     m.querySelector('.apply-modal').click();
     const html = e.previewContent.innerHTML;
     return html.includes('modal') && html.includes('<strong>Answer</strong>');
+});
+
+// --- tooltip ---------------------------------------------------------------
+
+const openTooltipDialog = editor => {
+    editor.editorContainer.querySelector('.tooltip-btn').click();
+    return editor.editorContainer.querySelector('.tooltip-modal');
+};
+
+check('tooltip tool renders a button', () => {
+    const e = makeEditor({ toolbar: FULL_BAR });
+    return e.editorContainer.querySelector('.tooltip-btn') !== null;
+});
+
+check('tooltip dialog opens with the text toolbar', () => {
+    const e = makeEditor({ toolbar: FULL_BAR });
+    const m = openTooltipDialog(e);
+    return m !== null
+        && m.querySelector('.tooltip-trigger-input') !== null
+        && m.querySelector('.tooltip-text-input') !== null
+        && m.querySelector('.tooltip-text-toolbar').querySelectorAll('.markdown-btn').length === 3
+        && m.querySelector('.tooltip-placement') !== null
+        && m.querySelector('.apply-tooltip') !== null;
+});
+
+check('apply inserts the bootstrap tooltip html', () => {
+    const e = makeEditor({ toolbar: FULL_BAR }, '');
+    const m = openTooltipDialog(e);
+    m.querySelector('.tooltip-trigger-input').value = 'Hover me';
+    m.querySelector('.tooltip-text-input').value = '**bold** tip';
+    m.querySelector('.apply-tooltip').click();
+    const v = e.usertextarea.value;
+    return v.includes('data-bs-toggle="tooltip"')
+        && v.includes('data-bs-html="true"')
+        && v.includes('data-bs-placement="top"')
+        && v.includes('Hover me')
+        && v.includes('&lt;strong&gt;bold&lt;/strong&gt;');
+});
+
+check('the placement selector changes the inserted attribute', () => {
+    const e = makeEditor({ toolbar: FULL_BAR }, '');
+    const m = openTooltipDialog(e);
+    m.querySelector('.tooltip-trigger-input').value = 'Hover me';
+    m.querySelector('.tooltip-text-input').value = 'tip';
+    m.querySelector('.tooltip-placement').value = 'bottom';
+    m.querySelector('.apply-tooltip').click();
+    return e.usertextarea.value.includes('data-bs-placement="bottom"');
+});
+
+check('the inserted tooltip survives the preview sanitizer', () => {
+    const e = makeEditor({ toolbar: FULL_BAR }, '');
+    const m = openTooltipDialog(e);
+    m.querySelector('.tooltip-trigger-input').value = 'Hover me';
+    m.querySelector('.tooltip-text-input').value = '**bold** tip';
+    m.querySelector('.apply-tooltip').click();
+    const html = e.previewContent.innerHTML;
+    return html.includes('data-bs-toggle="tooltip"') && html.includes('<strong>bold</strong>');
+});
+
+// --- popover ---------------------------------------------------------------
+
+const openPopoverDialog = editor => {
+    editor.editorContainer.querySelector('.popover-btn').click();
+    return editor.editorContainer.querySelector('.popover-modal');
+};
+
+check('popover tool renders a button', () => {
+    const e = makeEditor({ toolbar: FULL_BAR });
+    return e.editorContainer.querySelector('.popover-btn') !== null;
+});
+
+check('popover dialog opens with the content toolbar', () => {
+    const e = makeEditor({ toolbar: FULL_BAR });
+    const m = openPopoverDialog(e);
+    return m !== null
+        && m.querySelector('.popover-trigger-input') !== null
+        && m.querySelector('.popover-title-input') !== null
+        && m.querySelector('.popover-content-input') !== null
+        && m.querySelector('.popover-content-toolbar').querySelectorAll('.markdown-btn').length === 3
+        && m.querySelector('.popover-placement') !== null
+        && m.querySelector('.apply-popover') !== null;
+});
+
+check('apply inserts the bootstrap popover html', () => {
+    const e = makeEditor({ toolbar: FULL_BAR }, '');
+    const m = openPopoverDialog(e);
+    m.querySelector('.popover-trigger-input').value = 'Click me';
+    m.querySelector('.popover-title-input').value = 'My Title';
+    m.querySelector('.popover-content-input').value = '**bold** content';
+    m.querySelector('.apply-popover').click();
+    const v = e.usertextarea.value;
+    return v.includes('data-bs-toggle="popover"')
+        && v.includes('data-bs-html="true"')
+        && v.includes('data-bs-placement="top"')
+        && v.includes('data-bs-title="My Title"')
+        && v.includes('data-bs-content=')
+        && v.includes('Click me')
+        && v.includes('&lt;strong&gt;bold&lt;/strong&gt;');
+});
+
+check('the placement selector changes the inserted attribute', () => {
+    const e = makeEditor({ toolbar: FULL_BAR }, '');
+    const m = openPopoverDialog(e);
+    m.querySelector('.popover-trigger-input').value = 'Click me';
+    m.querySelector('.popover-content-input').value = 'content';
+    m.querySelector('.popover-placement').value = 'bottom';
+    m.querySelector('.apply-popover').click();
+    return e.usertextarea.value.includes('data-bs-placement="bottom"');
+});
+
+check('the inserted popover survives the preview sanitizer', () => {
+    const e = makeEditor({ toolbar: FULL_BAR }, '');
+    const m = openPopoverDialog(e);
+    m.querySelector('.popover-trigger-input').value = 'Click me';
+    m.querySelector('.popover-content-input').value = '**bold** content';
+    m.querySelector('.apply-popover').click();
+    const html = e.previewContent.innerHTML;
+    return html.includes('data-bs-toggle="popover"') && html.includes('<strong>bold</strong>');
 });
 
 // --- paste ------------------------------------------------------------------

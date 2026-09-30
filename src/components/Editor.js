@@ -366,6 +366,8 @@ class MarkdownEditor {
                 'buttonlink',
                 'accordion',
                 'modal',
+                'tooltip',
+                'popover',
                 'image',
                 
                 // View/Preview (Usually far right)

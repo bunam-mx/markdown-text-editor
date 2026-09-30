@@ -10,6 +10,8 @@ import LinkTool from './tools/LinkTool.js'
 import ButtonLinkTool from './tools/ButtonLinkTool.js'
 import AccordionTool from './tools/AccordionTool.js'
 import ModalTool from './tools/ModalTool.js'
+import TooltipTool from './tools/TooltipTool.js'
+import PopoverTool from './tools/PopoverTool.js'
 import HeadingTool from './tools/HeadingTool.js';
 import ImageTool from './tools/ImageTool.js';
 import UndoTool from './tools/UndoTool.js';
@@ -51,6 +53,8 @@ class Toolbar {
             buttonlink: ButtonLinkTool,
             accordion: AccordionTool,
             modal: ModalTool,
+            tooltip: TooltipTool,
+            popover: PopoverTool,
             image: ImageTool,
             undo: UndoTool,
             redo: RedoTool,

@@ -62,7 +62,7 @@ const varItems = editor => [...(varMenu(editor)?.querySelectorAll(ITEM) ?? [])];
 const labels = editor => varItems(editor).map(b => b.textContent);
 
 const BASE_BAR = ['heading', 'bold', 'italic', 'ul', 'ol', 'checklist', 'blockquote',
-                  'code', 'codeblock', 'hr', 'table', 'link', 'image',
+                  'code', 'codeblock', 'hr', 'table', 'link', 'buttonlink', 'image',
                   'undo', 'redo', 'indent', 'outdent'];
 const FULL_BAR = [...BASE_BAR, 'preview'];
 // variables are configured inline in the toolbar
@@ -197,6 +197,59 @@ check('heading menu items are translated', () => {
     const e = makeEditor({ toolbar: FULL_BAR, labels: { Heading: 'Titulo' } });
     const wrapper = e.editorContainer.querySelector('.heading-btn').closest('.fj\\:me-popover');
     return [...wrapper.querySelectorAll(ITEM)].some(b => b.textContent === 'Titulo 1');
+});
+
+// --- button link ------------------------------------------------------------
+
+const openButtonLinkModal = editor => {
+    editor.editorContainer.querySelector('.button-link-btn').click();
+    return editor.editorContainer.querySelector('.markdown-modal');
+};
+
+check('button link tool renders a button', () => {
+    const e = makeEditor({ toolbar: FULL_BAR });
+    return e.editorContainer.querySelector('.button-link-btn') !== null;
+});
+
+check('submitting the modal inserts a bootstrap button anchor', () => {
+    const e = makeEditor({ toolbar: FULL_BAR }, 'Click here');
+    e.usertextarea.setSelectionRange(0, 10);
+    const m = openButtonLinkModal(e);
+    m.querySelector('.button-link-input').value = 'https://example.com';
+    m.querySelector('.button-link-text-input').value = 'Click here';
+    m.querySelector('.submit-button-link').click();
+    return e.usertextarea.value === '<a href="https://example.com" class="btn btn-primary">Click here</a>';
+});
+
+check('the variant selector changes the inserted classes', () => {
+    const e = makeEditor({ toolbar: FULL_BAR }, '');
+    const m = openButtonLinkModal(e);
+    m.querySelector('.button-link-input').value = 'https://example.com';
+    m.querySelector('.button-link-text-input').value = 'Go';
+    const select = m.querySelector('.button-link-variant');
+    select.value = 'btn-danger';
+    m.querySelector('.submit-button-link').click();
+    return e.usertextarea.value === '<a href="https://example.com" class="btn btn-danger">Go</a>';
+});
+
+check('selecting an existing button link prefills the modal', () => {
+    const html = '<a href="https://example.com" class="btn btn-success">Go</a>';
+    const e = makeEditor({ toolbar: FULL_BAR }, html);
+    e.usertextarea.setSelectionRange(0, html.length);
+    const m = openButtonLinkModal(e);
+    return m.querySelector('.button-link-input').value === 'https://example.com'
+        && m.querySelector('.button-link-text-input').value === 'Go'
+        && m.querySelector('.button-link-variant').value === 'btn-success';
+});
+
+check('the inserted anchor survives the preview sanitizer', () => {
+    const e = makeEditor({ toolbar: FULL_BAR }, '');
+    const m = openButtonLinkModal(e);
+    m.querySelector('.button-link-input').value = 'https://example.com';
+    m.querySelector('.button-link-text-input').value = 'Go';
+    m.querySelector('.submit-button-link').click();
+    const html = e.previewContent.innerHTML;
+    return html.includes('<a') && html.includes('btn btn-primary') && html.includes('https://example.com');
 });
 
 // --- paste ------------------------------------------------------------------

@@ -7,6 +7,7 @@ import PreviewTool from './tools/PreviewTool.js'
 import CheckListTool from './tools/CheckListTool.js';
 import BlockQuoteTool from './tools/BlockQuoteTool.js';
 import LinkTool from './tools/LinkTool.js'
+import ButtonLinkTool from './tools/ButtonLinkTool.js'
 import HeadingTool from './tools/HeadingTool.js';
 import ImageTool from './tools/ImageTool.js';
 import UndoTool from './tools/UndoTool.js';
@@ -45,6 +46,7 @@ class Toolbar {
             hr: HrTool,
             table: TableTool,
             link: LinkTool,
+            buttonlink: ButtonLinkTool,
             image: ImageTool,
             undo: UndoTool,
             redo: RedoTool,

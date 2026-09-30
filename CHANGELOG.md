@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **`buttonlink` tool**: Inserts an HTML link styled as a Bootstrap button (`<a href="..." class="btn btn-primary">`) with a picker for the button variant, next to the regular link tool
+
 ## [1.8.0] - 2026-09-29
 
 ### Added

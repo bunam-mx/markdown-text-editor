@@ -22,6 +22,7 @@ export type ToolName =
     | 'hr'
     | 'table'
     | 'link'
+    | 'buttonlink'
     | 'image'
     | 'undo'
     | 'redo'

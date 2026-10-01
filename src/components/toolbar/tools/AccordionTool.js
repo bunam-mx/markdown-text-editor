@@ -131,11 +131,11 @@ class AccordionTool extends MakeTool {
             return `
   <div class="accordion-item">
     <h2 class="accordion-header">
-      <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#${collapseId}" aria-expanded="${expanded}" aria-controls="${collapseId}">
+      <button class="accordion-button" type="button" data-toggle="collapse" data-target="#${collapseId}" aria-expanded="${expanded}" aria-controls="${collapseId}">
         ${escapeHtml(item.header)}
       </button>
     </h2>
-    <div id="${collapseId}" class="accordion-collapse collapse${show}" data-bs-parent="#${accordionId}">
+    <div id="${collapseId}" class="accordion-collapse collapse${show}" data-parent="#${accordionId}">
       <div class="accordion-body">
         ${bodyHtml}
       </div>

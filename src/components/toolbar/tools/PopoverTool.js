@@ -103,7 +103,7 @@ class PopoverTool extends MakeTool {
     buildPopoverHtml(trigger, title, content, placement, editor) {
         const dataTitle = escapeAttr(title);
         const dataContent = escapeAttr(editor._renderMarkdown(content));
-        return `<button type="button" class="btn btn-secondary" data-bs-toggle="popover" data-bs-html="true" data-bs-placement="${placement}" data-bs-title="${dataTitle}" data-bs-content="${dataContent}">${trigger}</button>`;
+        return `<button type="button" class="btn btn-secondary" data-toggle="popover" data-html="true" data-placement="${placement}" data-title="${dataTitle}" data-content="${dataContent}">${trigger}</button>`;
     }
 }
 

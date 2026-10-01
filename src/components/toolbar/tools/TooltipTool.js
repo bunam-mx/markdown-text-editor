@@ -99,7 +99,7 @@ class TooltipTool extends MakeTool {
 
     buildTooltipHtml(trigger, text, placement, editor) {
         const title = escapeAttr(editor._renderMarkdown(text));
-        return `<button type="button" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="${placement}" title="${title}">${trigger}</button>`;
+        return `<button type="button" class="btn btn-secondary" data-toggle="tooltip" data-html="true" data-placement="${placement}" title="${title}">${trigger}</button>`;
     }
 }
 

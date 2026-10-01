@@ -398,9 +398,9 @@ check('apply inserts the bootstrap tooltip html', () => {
     m.querySelector('.tooltip-text-input').value = '**bold** tip';
     m.querySelector('.apply-tooltip').click();
     const v = e.usertextarea.value;
-    return v.includes('data-bs-toggle="tooltip"')
-        && v.includes('data-bs-html="true"')
-        && v.includes('data-bs-placement="top"')
+    return v.includes('data-toggle="tooltip"')
+        && v.includes('data-html="true"')
+        && v.includes('data-placement="top"')
         && v.includes('Hover me')
         && v.includes('&lt;strong&gt;bold&lt;/strong&gt;');
 });
@@ -412,7 +412,7 @@ check('the placement selector changes the inserted attribute', () => {
     m.querySelector('.tooltip-text-input').value = 'tip';
     m.querySelector('.tooltip-placement').value = 'bottom';
     m.querySelector('.apply-tooltip').click();
-    return e.usertextarea.value.includes('data-bs-placement="bottom"');
+    return e.usertextarea.value.includes('data-placement="bottom"');
 });
 
 check('the inserted tooltip survives the preview sanitizer', () => {
@@ -422,7 +422,7 @@ check('the inserted tooltip survives the preview sanitizer', () => {
     m.querySelector('.tooltip-text-input').value = '**bold** tip';
     m.querySelector('.apply-tooltip').click();
     const html = e.previewContent.innerHTML;
-    return html.includes('data-bs-toggle="tooltip"') && html.includes('<strong>bold</strong>');
+    return html.includes('data-toggle="tooltip"') && html.includes('<strong>bold</strong>');
 });
 
 // --- popover ---------------------------------------------------------------
@@ -457,11 +457,11 @@ check('apply inserts the bootstrap popover html', () => {
     m.querySelector('.popover-content-input').value = '**bold** content';
     m.querySelector('.apply-popover').click();
     const v = e.usertextarea.value;
-    return v.includes('data-bs-toggle="popover"')
-        && v.includes('data-bs-html="true"')
-        && v.includes('data-bs-placement="top"')
-        && v.includes('data-bs-title="My Title"')
-        && v.includes('data-bs-content=')
+    return v.includes('data-toggle="popover"')
+        && v.includes('data-html="true"')
+        && v.includes('data-placement="top"')
+        && v.includes('data-title="My Title"')
+        && v.includes('data-content=')
         && v.includes('Click me')
         && v.includes('&lt;strong&gt;bold&lt;/strong&gt;');
 });
@@ -473,7 +473,7 @@ check('the placement selector changes the inserted attribute', () => {
     m.querySelector('.popover-content-input').value = 'content';
     m.querySelector('.popover-placement').value = 'bottom';
     m.querySelector('.apply-popover').click();
-    return e.usertextarea.value.includes('data-bs-placement="bottom"');
+    return e.usertextarea.value.includes('data-placement="bottom"');
 });
 
 check('the inserted popover survives the preview sanitizer', () => {
@@ -483,7 +483,7 @@ check('the inserted popover survives the preview sanitizer', () => {
     m.querySelector('.popover-content-input').value = '**bold** content';
     m.querySelector('.apply-popover').click();
     const html = e.previewContent.innerHTML;
-    return html.includes('data-bs-toggle="popover"') && html.includes('<strong>bold</strong>');
+    return html.includes('data-toggle="popover"') && html.includes('<strong>bold</strong>');
 });
 
 // --- card -------------------------------------------------------------------

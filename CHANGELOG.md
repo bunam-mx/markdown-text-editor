@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **`modal` tool**: Inserts a Bootstrap Modal component with a title field and a rich-text body composed with the same mini toolbar as the accordion tool
 - **`tooltip` tool**: Inserts a Bootstrap Tooltip trigger with a placement selector and a rich-text label composed with a bold/italic/strikethrough mini toolbar
 - **`popover` tool**: Inserts a Bootstrap Popover trigger with a placement selector, a `data-bs-title` field, and a rich-text `data-bs-content` composed with a bold/italic/strikethrough mini toolbar
+- **`card` tool**: Inserts a Bootstrap Cards component grouped in a `.row`. The modal collects any number of cards (image, title, rich-text body with a bold/italic/strikethrough mini toolbar, button), and `Continue` stores each card while `Apply` renders the grid with column classes chosen by the card count
 
 ## [1.8.0] - 2026-09-29
 

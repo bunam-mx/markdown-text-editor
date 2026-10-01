@@ -368,6 +368,7 @@ class MarkdownEditor {
                 'modal',
                 'tooltip',
                 'popover',
+                'card',
                 'image',
                 
                 // View/Preview (Usually far right)

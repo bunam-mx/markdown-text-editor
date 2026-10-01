@@ -62,7 +62,7 @@ const varItems = editor => [...(varMenu(editor)?.querySelectorAll(ITEM) ?? [])];
 const labels = editor => varItems(editor).map(b => b.textContent);
 
 const BASE_BAR = ['heading', 'bold', 'italic', 'ul', 'ol', 'checklist', 'blockquote',
-                  'code', 'codeblock', 'hr', 'table', 'link', 'buttonlink', 'accordion', 'modal', 'tooltip', 'popover', 'image',
+                  'code', 'codeblock', 'hr', 'table', 'link', 'buttonlink', 'accordion', 'modal', 'tooltip', 'popover', 'card', 'image',
                   'undo', 'redo', 'indent', 'outdent'];
 const FULL_BAR = [...BASE_BAR, 'preview'];
 // variables are configured inline in the toolbar
@@ -484,6 +484,111 @@ check('the inserted popover survives the preview sanitizer', () => {
     m.querySelector('.apply-popover').click();
     const html = e.previewContent.innerHTML;
     return html.includes('data-bs-toggle="popover"') && html.includes('<strong>bold</strong>');
+});
+
+// --- card -------------------------------------------------------------------
+
+const openCardDialog = editor => {
+    editor.editorContainer.querySelector('.card-btn').click();
+    return editor.editorContainer.querySelector('.card-modal');
+};
+
+const fillCard = (m, { img = '', title = '', text = '', btn = '' } = {}) => {
+    m.querySelector('.card-img-input').value = img;
+    m.querySelector('.card-title-input').value = title;
+    m.querySelector('.card-text-input').value = text;
+    m.querySelector('.card-btn-input').value = btn;
+};
+
+check('card tool renders a button', () => {
+    const e = makeEditor({ toolbar: FULL_BAR });
+    return e.editorContainer.querySelector('.card-btn') !== null;
+});
+
+check('card dialog opens with the text toolbar', () => {
+    const e = makeEditor({ toolbar: FULL_BAR });
+    const m = openCardDialog(e);
+    return m !== null
+        && m.querySelector('.card-img-input') !== null
+        && m.querySelector('.card-title-input') !== null
+        && m.querySelector('.card-text-input') !== null
+        && m.querySelector('.card-btn-input') !== null
+        && m.querySelector('.card-text-toolbar').querySelectorAll('.markdown-btn').length === 3
+        && m.querySelector('.continue-card') !== null
+        && m.querySelector('.apply-card') !== null;
+});
+
+check('continue clears the form for the next card', () => {
+    const e = makeEditor({ toolbar: FULL_BAR }, '');
+    const m = openCardDialog(e);
+    fillCard(m, { title: 'First', text: '**hello**' });
+    m.querySelector('.continue-card').click();
+    return m.querySelector('.card-img-input').value === ''
+        && m.querySelector('.card-title-input').value === ''
+        && m.querySelector('.card-text-input').value === ''
+        && m.querySelector('.card-btn-input').value === '';
+});
+
+check('apply inserts a single card wrapped in a row', () => {
+    const e = makeEditor({ toolbar: FULL_BAR }, '');
+    const m = openCardDialog(e);
+    fillCard(m, { img: 'https://example.com/a.png', title: 'Solo', text: '**only**', btn: 'Go' });
+    m.querySelector('.apply-card').click();
+    const v = e.usertextarea.value;
+    return v.includes('<div class="row"')
+        && v.includes('col-sm-6 col-md-4 col-lg-3')
+        && v.includes('card-img-top')
+        && v.includes('Solo')
+        && v.includes('<strong>only</strong>')
+        && v.includes('>Go</a>');
+});
+
+check('three cards use the three-card column class', () => {
+    const e = makeEditor({ toolbar: FULL_BAR }, '');
+    const m = openCardDialog(e);
+    fillCard(m, { title: 'A' });
+    m.querySelector('.continue-card').click();
+    fillCard(m, { title: 'B' });
+    m.querySelector('.continue-card').click();
+    fillCard(m, { title: 'C' });
+    m.querySelector('.apply-card').click();
+    const v = e.usertextarea.value;
+    return (v.match(/accordion-item|card-item/g) || []).length === 0
+        && (v.match(/class="card"/g) || []).length === 3
+        && v.includes('col-sm-4 col-md-4 col-lg-3');
+});
+
+check('four cards use the four-card column class', () => {
+    const e = makeEditor({ toolbar: FULL_BAR }, '');
+    const m = openCardDialog(e);
+    for (let i = 0; i < 3; i++) {
+        fillCard(m, { title: 'C' + i });
+        m.querySelector('.continue-card').click();
+    }
+    fillCard(m, { title: 'D' });
+    m.querySelector('.apply-card').click();
+    return e.usertextarea.value.includes('col-sm-6 col-md-3 col-lg-3');
+});
+
+check('five or more cards use the default column class', () => {
+    const e = makeEditor({ toolbar: FULL_BAR }, '');
+    const m = openCardDialog(e);
+    for (let i = 0; i < 4; i++) {
+        fillCard(m, { title: 'C' + i });
+        m.querySelector('.continue-card').click();
+    }
+    fillCard(m, { title: 'E' });
+    m.querySelector('.apply-card').click();
+    return e.usertextarea.value.includes('col-sm-6 col-md-4 col-lg-3');
+});
+
+check('the inserted cards survive the preview sanitizer', () => {
+    const e = makeEditor({ toolbar: FULL_BAR }, '');
+    const m = openCardDialog(e);
+    fillCard(m, { title: 'FAQ', text: '**Answer**' });
+    m.querySelector('.apply-card').click();
+    const html = e.previewContent.innerHTML;
+    return html.includes('card') && html.includes('<strong>Answer</strong>');
 });
 
 // --- paste ------------------------------------------------------------------

@@ -12,6 +12,7 @@ import AccordionTool from './tools/AccordionTool.js'
 import ModalTool from './tools/ModalTool.js'
 import TooltipTool from './tools/TooltipTool.js'
 import PopoverTool from './tools/PopoverTool.js'
+import CardTool from './tools/CardTool.js'
 import HeadingTool from './tools/HeadingTool.js';
 import ImageTool from './tools/ImageTool.js';
 import UndoTool from './tools/UndoTool.js';
@@ -55,6 +56,7 @@ class Toolbar {
             modal: ModalTool,
             tooltip: TooltipTool,
             popover: PopoverTool,
+            card: CardTool,
             image: ImageTool,
             undo: UndoTool,
             redo: RedoTool,

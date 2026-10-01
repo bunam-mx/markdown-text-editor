@@ -27,6 +27,7 @@ export type ToolName =
     | 'modal'
     | 'tooltip'
     | 'popover'
+    | 'card'
     | 'image'
     | 'undo'
     | 'redo'
